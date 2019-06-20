@@ -152,7 +152,7 @@ public class MainActivity extends ListActivity {
             myCursor.moveToPosition(position);
 
             int myID = myCursor.getInt(myCursor.getColumnIndex(MediaStore.Video.Media._ID));
-            String myData = myCursor.getString(myCursor.getColumnIndex(MediaStore.Video.Media.DATA));
+            String myData = myCursor.getString(myCursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME));
             textV.setText(myData);
 
             String[] thumbColumns = {thumb_DATA, thumb_IMAGE_ID};
