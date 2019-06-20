@@ -6,9 +6,18 @@
     android:layout_height="match_parent"
     android:background="#000"
     tools:context=".VideoActivity">
+
     <VideoView
         android:layout_centerInParent="true"
         android:id="@+id/VideoView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </VideoView>
+    <ImageView
+        android:id="@+id/screenRotate"
+        android:padding="25sp"
+        android:src="@drawable/ic_screen_rotation_black_24dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
 </RelativeLayout>

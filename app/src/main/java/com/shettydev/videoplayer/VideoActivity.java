@@ -1,5 +1,7 @@
 package com.shettydev.videoplayer;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -8,19 +10,20 @@ import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-public class VideoActivity extends AppCompatActivity {
-    final Uri sourceUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-    final Uri thumbUri = MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI;
-    final String thumb_DATA = MediaStore.Video.Media.DATA;
-    final String thumb_IMAGE_ID = MediaStore.Video.Thumbnails.VIDEO_ID;
-    VideoView videoView;
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+import static android.content.res.Configuration.*;
 
+public class VideoActivity extends AppCompatActivity {
+        VideoView videoView;
+        ImageView screenRotate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +33,19 @@ public class VideoActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_video);
         videoView = (VideoView)findViewById(R.id.VideoView);
+        screenRotate=findViewById(R.id.screenRotate);
+        screenRotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Checks the orientation of the screen
+                if (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE == getRequestedOrientation()){
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT == getRequestedOrientation()){
+                    setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
 
+                }
+            }
+        });
         String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
 
 
