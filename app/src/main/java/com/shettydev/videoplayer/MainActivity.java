@@ -1,5 +1,6 @@
 package com.shettydev.videoplayer;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,21 +22,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.VideoView;
 
 public class MainActivity extends ListActivity {
-    //define source of MediaStore.Images.Media, internal or external storage
     final Uri sourceUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
     final Uri thumbUri = MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI;
     final String thumb_DATA = MediaStore.Video.Thumbnails.DATA;
     final String thumb_IMAGE_ID = MediaStore.Video.Thumbnails.VIDEO_ID;
-
-    //SimpleCursorAdapter mySimpleCursorAdapter;
     MyAdapter mySimpleCursorAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
 
         String[] from = {MediaStore.MediaColumns.TITLE};
         int[] to = {android.R.id.text1};
@@ -71,55 +70,60 @@ public class MainActivity extends ListActivity {
                                 long id) {
             Cursor cursor = mySimpleCursorAdapter.getCursor();
             cursor.moveToPosition(position);
+            String myData = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
+            Intent intent = new Intent(getBaseContext(), VideoActivity.class);
+            intent.putExtra("EXTRA_SESSION_ID", myData);
+            startActivity(intent);
 
+            Toast.makeText(MainActivity.this, ""+myData, Toast.LENGTH_LONG).show();
             int int_ID = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media._ID));
-            getThumbnail(int_ID);
+//            getThumbnail(int_ID);
         }};
 
-    private Bitmap getThumbnail(int id){
-
-        String[] thumbColumns = {thumb_DATA, thumb_IMAGE_ID};
-
-        CursorLoader thumbCursorLoader = new CursorLoader(
-                this,
-                thumbUri,
-                thumbColumns,
-                thumb_IMAGE_ID + "=" + id,
-                null,
-                null);
-
-        Cursor thumbCursor = thumbCursorLoader.loadInBackground();
-
-        Bitmap thumbBitmap = null;
-        if(thumbCursor.moveToFirst()){
-            int thCulumnIndex = thumbCursor.getColumnIndex(thumb_DATA);
-
-            String thumbPath = thumbCursor.getString(thCulumnIndex);
-
-            Toast.makeText(getApplicationContext(),
-                    thumbPath,
-                    Toast.LENGTH_LONG).show();
-
-            thumbBitmap = BitmapFactory.decodeFile(thumbPath);
-
-            //Create a Dialog to display the thumbnail
-            AlertDialog.Builder thumbDialog = new AlertDialog.Builder(MainActivity.this);
-            ImageView thumbView = new ImageView(MainActivity.this);
-            thumbView.setImageBitmap(thumbBitmap);
-            LinearLayout layout = new LinearLayout(MainActivity.this);
-            layout.setOrientation(LinearLayout.VERTICAL);
-            layout.addView(thumbView);
-            thumbDialog.setView(layout);
-            thumbDialog.show();
-
-        }else{
-            Toast.makeText(getApplicationContext(),
-                    "NO Thumbnail!",
-                    Toast.LENGTH_LONG).show();
-        }
-
-        return thumbBitmap;
-    }
+//    private Bitmap getThumbnail(int id){
+//
+//        String[] thumbColumns = {thumb_DATA, thumb_IMAGE_ID};
+//
+//        CursorLoader thumbCursorLoader = new CursorLoader(
+//                this,
+//                thumbUri,
+//                thumbColumns,
+//                thumb_IMAGE_ID + "=" + id,
+//                null,
+//                null);
+//
+//        Cursor thumbCursor = thumbCursorLoader.loadInBackground();
+//
+//        Bitmap thumbBitmap = null;
+//        if(thumbCursor.moveToFirst()){
+//            int thCulumnIndex = thumbCursor.getColumnIndex(thumb_DATA);
+//
+//            String thumbPath = thumbCursor.getString(thCulumnIndex);
+//
+//            Toast.makeText(getApplicationContext(),
+//                    String.valueOf(thumbUri),
+//                    Toast.LENGTH_LONG).show();
+//
+//            thumbBitmap = BitmapFactory.decodeFile(thumbPath);
+//
+//            //Create a Dialog to display the thumbnail
+//            AlertDialog.Builder thumbDialog = new AlertDialog.Builder(MainActivity.this);
+//            ImageView thumbView = new ImageView(MainActivity.this);
+//            thumbView.setImageBitmap(thumbBitmap);
+//            LinearLayout layout = new LinearLayout(MainActivity.this);
+//            layout.setOrientation(LinearLayout.VERTICAL);
+//            layout.addView(thumbView);
+//            thumbDialog.setView(layout);
+//            thumbDialog.show();
+//
+//        }else{
+//            Toast.makeText(getApplicationContext(),
+//                    "NO Thumbnail!",
+//                    Toast.LENGTH_LONG).show();
+//        }
+//
+//        return thumbBitmap;
+//    }
 
     public class MyAdapter extends SimpleCursorAdapter{
 
